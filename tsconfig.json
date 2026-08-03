@@ -5,7 +5,7 @@
     "lib": ["ES2022"],
     "outDir": "./dist",
     "rootDir": "./src",
-    
+
     /* Configurações de Qualidade de Código */
     "strict": true,
     "noImplicitAny": true,
