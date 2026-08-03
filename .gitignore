@@ -1,0 +1,31 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente (Segurança)
+.env
+.env.local
+.env.*.local
+
+# Pasta de build de produção (gerada pelo tsup/tsc)
+build/
+dist/
+
+# Prisma & Logs
+/src/generated/prisma
+prisma/*.db
+prisma/*.db-journal
+*.log
+
+# Ferramentas de IA / Agent Skills (gerados pelo Prisma 7)
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
+
+# Cobertura de testes (Vitest / Jest)
+coverage/
+
+# Arquivos do sistema / IDEs
+.DS_Store
+.vscode/
+.idea/
