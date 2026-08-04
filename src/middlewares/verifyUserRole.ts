@@ -6,7 +6,9 @@ export function verifyUserRole(roleToVerify: Role) {
     const user = req.user;
 
     if (!user || user.role !== roleToVerify) {
-      return res.status(403).json({ message: 'Acesso não autorizado para este recurso.' });
+      return res
+        .status(403)
+        .json({ message: 'Acesso não autorizado para este recurso.' });
     }
 
     return next();

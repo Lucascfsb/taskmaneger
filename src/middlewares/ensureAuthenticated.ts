@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AppError } from "../utils/AppError";
-import { authConfig } from "@/configs/authConfig";
+import { AppError } from '../utils/AppError';
+import { authConfig } from '@/configs/authConfig';
 
 interface ITokenPayload {
   sub: string;
@@ -10,21 +10,21 @@ interface ITokenPayload {
 
 export function ensureAuthenticated(
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ) {
   try {
-  const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
-    throw new AppError("JWT token is missing", 401);
-  }
+    if (!authHeader) {
+      throw new AppError('JWT token is missing', 401);
+    }
 
-  const [, token] = authHeader.split(' ');
+    const [, token] = authHeader.split(' ');
 
-  const { role, sub: user_id } = jwt.verify(
+    const { role, sub: user_id } = jwt.verify(
       token,
-      authConfig.jwt.secret,
+      authConfig.jwt.secret
     ) as ITokenPayload;
 
     req.user = {

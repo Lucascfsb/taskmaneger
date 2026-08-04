@@ -1,12 +1,12 @@
-import { Request, Response, NextFunction } from "express";
-import { AppError } from "../utils/AppError";
-import { ZodError, z } from "zod";
+import { Request, Response, NextFunction } from 'express';
+import { AppError } from '../utils/AppError';
+import { ZodError, z } from 'zod';
 
 export function errorHandling(
   error: any,
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({
@@ -16,7 +16,7 @@ export function errorHandling(
 
   if (error instanceof ZodError) {
     return res.status(400).json({
-      message: "Validation error",
+      message: 'Validation error',
       issues: z.treeifyError(error),
     });
   }

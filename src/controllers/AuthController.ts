@@ -69,14 +69,10 @@ export class AuthController {
       return res.status(401).json({ message: 'E-mail ou senha incorretos.' });
     }
 
-    const token = jwt.sign(
-      { role: user.role },
-      env.JWT_SECRET,
-      {
-        subject: String(user.id),
-        expiresIn: '1d',
-      }
-    );
+    const token = jwt.sign({ role: user.role }, env.JWT_SECRET, {
+      subject: String(user.id),
+      expiresIn: '1d',
+    });
 
     return res.json({
       user: {
