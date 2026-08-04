@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { CreateUserService } from '../services/CreateUserService';
+import { ListUsersService } from '../services/ListUsersService';
 
 export class UsersController {
   async create(request: Request, response: Response) {
@@ -25,5 +26,15 @@ export class UsersController {
     });
 
     return response.status(201).json(user);
+  }
+}
+
+export class ListUsersController {
+  async handle(_req: Request, res: Response) {
+    const listUsersService = new ListUsersService();
+
+    const users = await listUsersService.execute();
+
+    return res.json(users);
   }
 }
