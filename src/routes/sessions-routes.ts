@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { AuthController } from '../controllers/SessionsController';
+import { SessionsController } from '../controllers/SessionsController';
 
-const authRoutes = Router();
-const authController = new AuthController();
+const sessionsRoutes = Router();
+const authController = new SessionsController();
 
-authRoutes.post('/', authController.register);
+sessionsRoutes.post('/', authController.login);
 
-export { authRoutes };
+export { sessionsRoutes };
