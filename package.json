@@ -16,7 +16,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lucascastrofernandes/task-management-api.git"
+    "url": "https://github.com/Lucascfsb/taskmaneger.git"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
