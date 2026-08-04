@@ -25,7 +25,7 @@ enum Priority {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   name      String   @db.VarChar(100)
   email     String   @unique @db.VarChar(150)
   password  String   @db.VarChar(255)
@@ -41,7 +41,7 @@ model User {
 }
 
 model Team {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   name        String   @db.VarChar(100)
   description String?  @db.Text
   createdAt   DateTime @default(now()) @map("created_at")
@@ -54,9 +54,9 @@ model Team {
 }
 
 model TeamMember {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  teamId    Int      @map("team_id")
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  teamId    String   @map("team_id")
   createdAt DateTime @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -67,27 +67,27 @@ model TeamMember {
 }
 
 model Task {
-  id          Int        @id @default(autoincrement())
+  id          String     @id @default(uuid())
   title       String     @db.VarChar(200)
   description String?    @db.Text
   status      TaskStatus @default(PENDING)
   priority    Priority   @default(MEDIUM)
-  assignedTo  Int?       @map("assigned_to")
-  teamId      Int        @map("team_id")
+  assignedTo  String?    @map("assigned_to")
+  teamId      String     @map("team_id")
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
 
-  assignee  User?         @relation("AssignedTasks", fields: [assignedTo], references: [id], onDelete: SetNull)
-  team      Team          @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  assignee  User?       @relation("AssignedTasks", fields: [assignedTo], references: [id], onDelete: SetNull)
+  team      Team        @relation(fields: [teamId], references: [id], onDelete: Cascade)
   histories TaskHistory[]
 
   @@map("tasks")
 }
 
 model TaskHistory {
-  id        Int        @id @default(autoincrement())
-  taskId    Int        @map("task_id")
-  changedBy Int        @map("changed_by")
+  id        String     @id @default(uuid())
+  taskId    String     @map("task_id")
+  changedBy String     @map("changed_by")
   oldStatus TaskStatus @map("old_status")
   newStatus TaskStatus @map("new_status")
   changedAt DateTime   @default(now()) @map("changed_at")

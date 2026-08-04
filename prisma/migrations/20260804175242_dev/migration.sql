@@ -9,7 +9,7 @@ CREATE TYPE "Priority" AS ENUM ('high', 'medium', 'low');
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(150) NOT NULL,
     "password" VARCHAR(255) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "teams" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "description" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -33,9 +33,9 @@ CREATE TABLE "teams" (
 
 -- CreateTable
 CREATE TABLE "team_members" (
-    "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "team_id" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "team_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "team_members_pkey" PRIMARY KEY ("id")
@@ -43,13 +43,13 @@ CREATE TABLE "team_members" (
 
 -- CreateTable
 CREATE TABLE "tasks" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "title" VARCHAR(200) NOT NULL,
     "description" TEXT,
     "status" "TaskStatus" NOT NULL DEFAULT 'pending',
     "priority" "Priority" NOT NULL DEFAULT 'medium',
-    "assigned_to" INTEGER,
-    "team_id" INTEGER NOT NULL,
+    "assigned_to" TEXT,
+    "team_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -58,9 +58,9 @@ CREATE TABLE "tasks" (
 
 -- CreateTable
 CREATE TABLE "tasks_history" (
-    "id" SERIAL NOT NULL,
-    "task_id" INTEGER NOT NULL,
-    "changed_by" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "task_id" TEXT NOT NULL,
+    "changed_by" TEXT NOT NULL,
     "old_status" "TaskStatus" NOT NULL,
     "new_status" "TaskStatus" NOT NULL,
     "changed_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
