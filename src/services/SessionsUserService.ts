@@ -1,7 +1,7 @@
 import { compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
+import { authConfig } from '../configs/authConfig';
 import { prisma } from '../database/prisma';
-import { env } from '../env';
 import { AppError } from '../utils/AppError';
 
 interface AuthenticateUserRequest {
@@ -38,10 +38,16 @@ export class AuthenticateUserService {
       throw new AppError('E-mail ou senha incorretos.', 401);
     }
 
-    const token = sign({ role: user.role }, env.JWT_SECRET, {
-      subject: String(user.id),
-      expiresIn: '1d',
-    });
+    const { secret, expiresIn } = authConfig.jwt;
+
+    const token = jwt.sign(
+      { role: user.role ?? 'MEMBER' },
+      secret as Secret,
+      {
+        subject: String(user.id),
+        expiresIn,
+      } as SignOptions
+    );
 
     return {
       user: {
