@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { env } from '../env';
-import { Role } from '@/generated/prisma/enums';
+import { AppError } from "../utils/AppError";
+import { authConfig } from "@/configs/authConfig";
 
-interface TokenPayload {
+interface ITokenPayload {
   sub: string;
-  role: Role;
+  role: string;
 }
 
 export function ensureAuthenticated(
@@ -13,24 +13,27 @@ export function ensureAuthenticated(
   res: Response,
   next: NextFunction
 ) {
+  try {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json({ message: 'JWT token de acesso não fornecido.' });
+    throw new AppError("JWT token is missing", 401);
   }
 
   const [, token] = authHeader.split(' ');
 
-  try {
-    const decoded = jwt.verify(token, env.JWT_SECRET) as TokenPayload;
+  const { role, sub: user_id } = jwt.verify(
+      token,
+      authConfig.jwt.secret,
+    ) as ITokenPayload;
 
     req.user = {
-      id: Number(decoded.sub),
-      role: decoded.role,
+      id: user_id,
+      role,
     };
 
     return next();
-  } catch {
-    return res.status(401).json({ message: 'Token de acesso inválido ou expirado.' });
+  } catch (error) {
+    throw new AppError('Invalid JWT token', 401);
   }
 }

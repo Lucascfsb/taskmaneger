@@ -1,4 +1,3 @@
-
 import { Request, Response, NextFunction } from 'express';
 import { Role } from '@/generated/prisma/enums';
 
