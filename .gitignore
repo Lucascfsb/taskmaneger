@@ -16,16 +16,13 @@ prisma/*.db
 prisma/*.db-journal
 *.log
 
-# Ferramentas de IA / Agent Skills (gerados pelo Prisma 7)
 .agents/
 .claude/
 .windsurf/
 skills-lock.json
 
-# Cobertura de testes (Vitest / Jest)
 coverage/
 
-# Arquivos do sistema / IDEs
 .DS_Store
 .vscode/
 .idea/

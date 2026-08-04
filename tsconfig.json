@@ -6,7 +6,6 @@
     "outDir": "./dist",
     "rootDir": "./src",
 
-    /* Configurações de Qualidade de Código */
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -16,13 +15,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* Interoperabilidade e Módulos */
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
-    /* Mapeamento de Caminhos (Aliases) */
     "paths": {
       "@/*": ["./src/*"]
     }
