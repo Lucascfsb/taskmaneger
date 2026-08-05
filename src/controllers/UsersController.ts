@@ -30,7 +30,7 @@ export class UsersController {
 }
 
 export class ListUsersController {
-  async handle(_req: Request, res: Response) {
+  async list(_req: Request, res: Response) {
     const listUsersService = new ListUsersService();
 
     const users = await listUsersService.execute();
