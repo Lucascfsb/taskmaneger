@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 import { CreateUserService } from '../services/CreateUserService';
 import { ListUsersService } from '../services/ListUsersService';
+import { ShowUserService } from '../services/ShowUserService';
+import { UpdateUserService } from '../services/UpdateUserService';
+import { DeleteUserService } from '../services/DeleteUserService';
 
 export class UsersController {
   async create(request: Request, response: Response) {
@@ -36,5 +39,75 @@ export class ListUsersController {
     const users = await listUsersService.execute();
 
     return res.json(users);
+  }
+}
+
+export class ShowUserController {
+  async show(request: Request, response: Response) {
+    const showUserParamsSchema = z.object({
+      id: z.uuid('ID inválido'),
+    });
+
+    const { id } = showUserParamsSchema.parse(request.params);
+
+    const showUserService = new ShowUserService();
+
+    const user = await showUserService.execute({ id });
+
+    return response.json(user);
+  }
+}
+
+export class UpdateUserController {
+  async update(request: Request, response: Response) {
+    const updateUserParamsSchema = z.object({
+      id: z.uuid('ID inválido'),
+    });
+
+    const updateUserBodySchema = z.object({
+      name: z
+        .string()
+        .min(2, 'O nome deve ter no mínimo 2 caracteres')
+        .optional(),
+      email: z.email('E-mail inválido').optional(),
+      password: z
+        .string()
+        .min(6, 'A senha deve ter no mínimo 6 caracteres')
+        .optional(),
+      old_password: z.string().optional(),
+    });
+
+    const { id } = updateUserParamsSchema.parse(request.params);
+    const { name, email, password, old_password } = updateUserBodySchema.parse(
+      request.body
+    );
+
+    const updateUserService = new UpdateUserService();
+
+    const user = await updateUserService.execute({
+      id,
+      name,
+      email,
+      password,
+      old_password,
+    });
+
+    return response.json(user);
+  }
+}
+
+export class DeleteUserController {
+  async delete(request: Request, response: Response) {
+    const deleteUserParamsSchema = z.object({
+      id: z.uuid('ID inválido'),
+    });
+
+    const { id } = deleteUserParamsSchema.parse(request.params);
+
+    const deleteUserService = new DeleteUserService();
+
+    await deleteUserService.execute({ id });
+
+    return response.status(204).send();
   }
 }
