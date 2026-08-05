@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { AuthenticateUserService } from '../services/SessionsUserService';
+import { AuthenticateUserService } from '../services/sessions/SessionsUserService';
 
 export class SessionsController {
   async login(req: Request, res: Response) {

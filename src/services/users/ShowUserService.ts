@@ -1,5 +1,5 @@
-import { prisma } from '../database/prisma';
-import { AppError } from '../utils/AppError';
+import { prisma } from '../../database/prisma';
+import { AppError } from '../../utils/AppError';
 
 interface ShowUserRequest {
   id: string;

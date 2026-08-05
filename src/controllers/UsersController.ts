@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { CreateUserService } from '../services/CreateUserService';
+import { CreateUserService } from '../services/users/CreateUserService';
 import { ListUsersService } from '../services/users/ListUsersService';
-import { ShowUserService } from '../services/ShowUserService';
-import { UpdateUserService } from '../services/UpdateUserService';
-import { DeleteUserService } from '../services/DeleteUserService';
+import { ShowUserService } from '../services/users/ShowUserService';
+import { UpdateUserService } from '../services/users/UpdateUserService';
+import { DeleteUserService } from '../services/users/DeleteUserService';
 
 export class UsersController {
   async create(request: Request, response: Response) {

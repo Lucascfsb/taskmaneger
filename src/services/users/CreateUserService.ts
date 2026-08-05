@@ -1,6 +1,6 @@
 import { hash } from 'bcryptjs';
-import { prisma } from '../database/prisma';
-import { AppError } from '../utils/AppError';
+import { prisma } from '../../database/prisma';
+import { AppError } from '../../utils/AppError';
 
 interface CreateUserRequest {
   name: string;

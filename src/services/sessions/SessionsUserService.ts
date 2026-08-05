@@ -1,8 +1,8 @@
 import { compare } from 'bcryptjs';
 import jwt, { Secret, SignOptions } from 'jsonwebtoken';
-import { authConfig } from '../configs/authConfig';
-import { prisma } from '../database/prisma';
-import { AppError } from '../utils/AppError';
+import { authConfig } from '../../configs/authConfig';
+import { prisma } from '../../database/prisma';
+import { AppError } from '../../utils/AppError';
 
 interface AuthenticateUserRequest {
   email: string;
