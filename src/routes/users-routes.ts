@@ -7,6 +7,7 @@ import {
   DeleteUserController,
 } from '../controllers/UsersController';
 import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
+import { verifyUserRole } from '@/middlewares/verifyUserRole';
 
 const usersRoutes = Router();
 
@@ -18,9 +19,20 @@ const deleteUserController = new DeleteUserController();
 
 usersRoutes.post('/', usersController.create);
 
-usersRoutes.get('/', ensureAuthenticated, listUsersController.list);
+usersRoutes.get(
+  '/',
+  ensureAuthenticated,
+  verifyUserRole('ADMIN'),
+  listUsersController.list
+);
+usersRoutes.delete(
+  '/:id',
+  ensureAuthenticated,
+  verifyUserRole('ADMIN'),
+  deleteUserController.delete
+);
+
 usersRoutes.get('/:id', ensureAuthenticated, showUserController.show);
 usersRoutes.put('/:id', ensureAuthenticated, updateUserController.update);
-usersRoutes.delete('/:id', ensureAuthenticated, deleteUserController.delete);
 
 export { usersRoutes };
