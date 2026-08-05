@@ -8,7 +8,7 @@ export function verifyUserRole(roleToVerify: Role) {
     if (!user || user.role !== roleToVerify) {
       return res
         .status(403)
-        .json({ message: 'Acesso não autorizado para este recurso.' });
+        .json({ message: 'Unauthorized access to this resource.' });
     }
 
     return next();
