@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
-  DATABASE_URL: z.url('DATABASE_URL deve ser uma URL válida'),
-  JWT_SECRET: z.string().min(1, 'JWT_SECRET é obrigatório'),
+  DATABASE_URL: z.url('DATABASE_URL must be a valid URL'),
+  JWT_SECRET: z.string().min(1, 'JWT_SECRET must be a non-empty string'),
 });
 
 const _env = envSchema.safeParse(process.env);

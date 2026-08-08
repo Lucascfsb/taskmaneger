@@ -5,6 +5,7 @@ import { ListUsersService } from '../services/users/ListUsersService';
 import { ShowUserService } from '../services/users/ShowUserService';
 import { UpdateUserService } from '../services/users/UpdateUserService';
 import { DeleteUserService } from '../services/users/DeleteUserService';
+import { AppError } from '@/utils/AppError';
 
 export class UsersController {
   async create(request: Request, response: Response) {
@@ -63,7 +64,7 @@ export class ShowUserController {
 export class UpdateUserController {
   async update(request: Request, response: Response) {
     const updateUserParamsSchema = z.object({
-      id: z.uuid('ID inválido'),
+      id: z.string().uuid('ID inválido'),
     });
 
     const updateUserBodySchema = z.object({
@@ -84,10 +85,19 @@ export class UpdateUserController {
       request.body
     );
 
+    // 1. Validação do usuário logado
+    if (!request.user) {
+      throw new AppError('Unauthorized access.', 401);
+    }
+
+    const { id: userId, role: userRole } = request.user;
+
     const updateUserService = new UpdateUserService();
 
     const user = await updateUserService.execute({
       id,
+      userId,
+      userRole, 
       name,
       email,
       password,
@@ -106,9 +116,19 @@ export class DeleteUserController {
 
     const { id } = deleteUserParamsSchema.parse(request.params);
 
+    if (!request.user) {
+      throw new AppError('Unauthorized access.', 401);
+    }
+
+    const { id: userId, role: userRole } = request.user;
+
     const deleteUserService = new DeleteUserService();
 
-    await deleteUserService.execute({ id });
+    await deleteUserService.execute({
+      id,
+      userId,
+      userRole,
+    });
 
     return response.status(204).send();
   }

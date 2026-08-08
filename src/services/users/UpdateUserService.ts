@@ -1,9 +1,12 @@
 import { compare, hash } from 'bcryptjs';
 import { prisma } from '../../database/prisma';
 import { AppError } from '../../utils/AppError';
+import { Role } from '@/generated/prisma/enums';
 
 interface UpdateUserRequest {
   id: string;
+  userId: string;
+  userRole: Role;
   name?: string;
   email?: string;
   password?: string;
@@ -13,11 +16,18 @@ interface UpdateUserRequest {
 export class UpdateUserService {
   async execute({
     id,
+    userId,
+    userRole,
     name,
     email,
     password,
     old_password,
   }: UpdateUserRequest) {
+    // 1. Trava de segurança: Se NÃO for ADMIN e tentar alterar a conta de OUTRO usuário
+    if (userRole !== Role.ADMIN && userId !== id) {
+      throw new AppError('Unauthorized access to this resource.', 403);
+    }
+
     const user = await prisma.user.findUnique({
       where: { id },
     });
