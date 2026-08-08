@@ -23,7 +23,6 @@ export class UpdateUserService {
     password,
     old_password,
   }: UpdateUserRequest) {
-    // 1. Trava de segurança: Se NÃO for ADMIN e tentar alterar a conta de OUTRO usuário
     if (userRole !== Role.ADMIN && userId !== id) {
       throw new AppError('Unauthorized access to this resource.', 403);
     }

@@ -1,31 +1,19 @@
-// import { Router } from 'express';
-// import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
-// import { verifyUserRole } from '@/middlewares/verifyUserRole';
+import { Router } from 'express';
+import { TasksController } from '../controllers/TasksController';
+import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
+import { verifyUserRole } from '../middlewares/verifyUserRole';
 
-// const tasksRoutes = Router();
+const tasksRoutes = Router();
+const tasksController = new TasksController();
 
-// tasksRoutes.use(ensureAuthenticated); // Exige login
+tasksRoutes.use(ensureAuthenticated);
 
-// tasksRoutes.post(
-//   '/',
-//   verifyUserRole(['ADMIN', 'MEMBER']),
-//   tasksController.create
-// );
-// tasksRoutes.get(
-//   '/',
-//   verifyUserRole(['ADMIN', 'MEMBER']),
-//   tasksController.index
-// );
-// tasksRoutes.get(
-//   '/:id',
-//   verifyUserRole(['ADMIN', 'MEMBER']),
-//   tasksController.show
-// );
+tasksRoutes.get('/', tasksController.list);
 
-// tasksRoutes.put(
-//   '/:id',
-//   verifyUserRole(['ADMIN', 'MEMBER']),
-//   tasksController.update
-// );
+tasksRoutes.post('/', verifyUserRole('ADMIN'), tasksController.create);
+tasksRoutes.delete('/:id', verifyUserRole('ADMIN'), tasksController.delete);
 
-// tasksRoutes.delete('/:id', verifyUserRole('ADMIN'), tasksController.delete);
+tasksRoutes.put('/:id', tasksController.update);
+tasksRoutes.patch('/:id/assign', tasksController.assign);
+
+export { tasksRoutes };

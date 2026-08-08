@@ -85,7 +85,6 @@ export class UpdateUserController {
       request.body
     );
 
-    // 1. Validação do usuário logado
     if (!request.user) {
       throw new AppError('Unauthorized access.', 401);
     }
@@ -97,7 +96,7 @@ export class UpdateUserController {
     const user = await updateUserService.execute({
       id,
       userId,
-      userRole, 
+      userRole,
       name,
       email,
       password,
