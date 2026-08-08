@@ -38,8 +38,18 @@ export class TasksController {
       request.query
     );
 
+    if (!request.user) {
+      throw new AppError('Unauthorized', 401);
+    }
+
     const listTasksService = new ListTasksService();
-    const tasks = await listTasksService.execute({ status, priority, teamId });
+    const tasks = await listTasksService.execute({
+      status,
+      priority,
+      teamId,
+      userId: request.user.id,
+      userRole: request.user.role,
+    });
 
     return response.json(tasks);
   }
@@ -65,11 +75,13 @@ export class TasksController {
     }
 
     const userId = request.user.id;
+    const userRole = request.user.role;
 
     const updateTaskService = new UpdateTaskService();
     const task = await updateTaskService.execute({
       taskId,
       userId,
+      userRole,
       ...data,
     });
 
@@ -83,9 +95,16 @@ export class TasksController {
 
     const { id: taskId } = deleteTaskParamsSchema.parse(request.params);
 
-    const deleteTaskService = new DeleteTaskService();
-    await deleteTaskService.execute({ taskId });
+    if (!request.user) {
+      throw new AppError('Unauthorized', 401);
+    }
 
+    const deleteTaskService = new DeleteTaskService();
+    await deleteTaskService.execute({
+      taskId,
+      userId: request.user.id,
+      userRole: request.user.role,
+    });
     return response.status(204).send();
   }
 

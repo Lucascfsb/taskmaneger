@@ -14,6 +14,10 @@ tasksRoutes.post('/', verifyUserRole('ADMIN'), tasksController.create);
 tasksRoutes.delete('/:id', verifyUserRole('ADMIN'), tasksController.delete);
 
 tasksRoutes.put('/:id', tasksController.update);
-tasksRoutes.patch('/:id/assign', tasksController.assign);
+tasksRoutes.patch(
+  '/:id/assign',
+  verifyUserRole('ADMIN'),
+  tasksController.assign
+);
 
 export { tasksRoutes };

@@ -5,6 +5,7 @@ import { Priority, TaskStatus } from '../../generated/prisma/enums';
 interface UpdateTaskRequest {
   taskId: string;
   userId: string;
+  userRole: string;
   title?: string;
   description?: string;
   status?: TaskStatus;
@@ -16,6 +17,7 @@ export class UpdateTaskService {
   async execute({
     taskId,
     userId,
+    userRole,
     title,
     description,
     status,
@@ -28,6 +30,10 @@ export class UpdateTaskService {
 
     if (!task) {
       throw new AppError('Task not found.', 404);
+    }
+
+    if (userRole === 'MEMBER' && task.assignedTo !== userId) {
+      throw new AppError('You do not have permission to manage this task', 403);
     }
 
     if (status && status !== task.status) {
