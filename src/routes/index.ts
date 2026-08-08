@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { sessionsRoutes } from './sessions-routes';
-import { usersRoutes } from './users-routes';
-import { teamsRoutes } from './teams-routes';
+import { sessionsRoutes } from './sessions.routes';
+import { usersRoutes } from './users.routes';
+import { teamsRoutes } from './teams.routes';
 
 const routes = Router();
 

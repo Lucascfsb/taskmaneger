@@ -4,7 +4,10 @@ import { CreateTeamService } from '../services/teams/CreateTeamService';
 import { ListTeamsService } from '../services/teams/ListTeamsService';
 import { UpdateTeamService } from '../services/teams/UpdateTeamService';
 import { DeleteTeamService } from '../services/teams/DeleteTeamService';
-import { ShowTeamService } from '@/services/teams/ShowTeamService';
+import { ShowTeamService } from '../services/teams/ShowTeamService';
+import { AddTeamMemberService } from '../services/teams/AddTeamMemberService';
+import { RemoveTeamMemberService } from '../services/teams/RemoveTeamMemberService';
+import { ListTeamMembersService } from '../services/teams/ListTeamMembersService';
 
 export class TeamsController {
   async create(request: Request, response: Response) {
@@ -43,7 +46,7 @@ export class TeamsController {
 
   async update(request: Request, response: Response) {
     const updateTeamParamsSchema = z.object({
-      id: z.string(),
+      id: z.string().uuid(),
     });
 
     const updateTeamBodySchema = z.object({
@@ -62,7 +65,7 @@ export class TeamsController {
 
   async delete(request: Request, response: Response) {
     const deleteTeamParamsSchema = z.object({
-      id: z.string(),
+      id: z.string().uuid(),
     });
 
     const { id } = deleteTeamParamsSchema.parse(request.params);
@@ -73,32 +76,50 @@ export class TeamsController {
     return response.status(204).send();
   }
 
-  // async addMember(request: Request, response: Response) {
-  //   const addMemberParamsSchema = z.object({
-  //     id: z.string(),
-  //   });
+  async addMember(request: Request, response: Response) {
+    const addMemberParamsSchema = z.object({
+      id: z.string().uuid(),
+    });
 
-  //   const addMemberBodySchema = z.object({
-  //     userId: z.string(),
-  //   });
+    const addMemberBodySchema = z.object({
+      userId: z.string().uuid(),
+    });
 
-  //   const { id } = addMemberParamsSchema.parse(request.params);
-  //   const { userId } = addMemberBodySchema.parse(request.body);
+    const { id: teamId } = addMemberParamsSchema.parse(request.params);
+    const { userId } = addMemberBodySchema.parse(request.body);
 
-  //   // Chame seu AddTeamMemberService aqui
-  //   return response.status(201).json({ message: `Membro ${userId} adicionado ao time ${id}` });
-  // }
+    const addTeamMemberService = new AddTeamMemberService();
+    const member = await addTeamMemberService.execute({ teamId, userId });
 
-  // // Novo método 'removeMember' para a rota DELETE /teams/:id/members/:userId
-  // async removeMember(request: Request, response: Response) {
-  //   const removeMemberParamsSchema = z.object({
-  //     id: z.string(),
-  //     userId: z.string(),
-  //   });
+    return response.status(201).json(member);
+  }
 
-  //   const { id, userId } = removeMemberParamsSchema.parse(request.params);
+  async removeMember(request: Request, response: Response) {
+    const removeMemberParamsSchema = z.object({
+      id: z.string().uuid(),
+      userId: z.string().uuid(),
+    });
 
-  //   // Chame seu RemoveTeamMemberService aqui
-  //   return response.status(204).send();
-  // }
+    const { id: teamId, userId } = removeMemberParamsSchema.parse(
+      request.params
+    );
+
+    const removeTeamMemberService = new RemoveTeamMemberService();
+    await removeTeamMemberService.execute({ teamId, userId });
+
+    return response.status(204).send();
+  }
+
+  async listMembers(request: Request, response: Response) {
+    const listMembersParamsSchema = z.object({
+      id: z.string().uuid(),
+    });
+
+    const { id: teamId } = listMembersParamsSchema.parse(request.params);
+
+    const listTeamMembersService = new ListTeamMembersService();
+    const members = await listTeamMembersService.execute({ teamId });
+
+    return response.json(members);
+  }
 }
