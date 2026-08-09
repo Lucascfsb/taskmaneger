@@ -1,3 +1,4 @@
+// src/services/tasks/UpdateTaskService.ts
 import { prisma } from '../../database/prisma';
 import { AppError } from '../../utils/AppError';
 import { Priority, TaskStatus } from '../../generated/prisma/enums';
@@ -36,34 +37,40 @@ export class UpdateTaskService {
       throw new AppError('You do not have permission to manage this task', 403);
     }
 
-    if (status && status !== task.status) {
-      await prisma.taskHistory.create({
+    const statusChanged = status && status !== task.status;
+
+    const [updatedTask] = await prisma.$transaction(async (tx) => {
+      if (statusChanged) {
+        await tx.taskHistory.create({
+          data: {
+            taskId,
+            changedBy: userId,
+            oldStatus: task.status,
+            newStatus: status,
+          },
+        });
+      }
+
+      const updated = await tx.task.update({
+        where: { id: taskId },
         data: {
-          taskId,
-          changedBy: userId,
-          oldStatus: task.status,
-          newStatus: status,
+          title,
+          description,
+          status,
+          priority,
+          assignedTo,
+        },
+        include: {
+          assignee: {
+            select: { id: true, name: true, email: true },
+          },
+          team: {
+            select: { id: true, name: true },
+          },
         },
       });
-    }
 
-    const updatedTask = await prisma.task.update({
-      where: { id: taskId },
-      data: {
-        title,
-        description,
-        status,
-        priority,
-        assignedTo,
-      },
-      include: {
-        assignee: {
-          select: { id: true, name: true, email: true },
-        },
-        team: {
-          select: { id: true, name: true },
-        },
-      },
+      return [updated];
     });
 
     return updatedTask;

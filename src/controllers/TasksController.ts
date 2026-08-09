@@ -5,6 +5,7 @@ import { ListTasksService } from '../services/tasks/ListTasksService';
 import { UpdateTaskService } from '../services/tasks/UpdateTaskService';
 import { DeleteTaskService } from '../services/tasks/DeleteTaskService';
 import { AssignTaskService } from '../services/tasks/AssignTaskService';
+import { GetTaskHistoryService } from '../services/tasks/GetTaskHistoryService';
 import { Priority, TaskStatus } from '../generated/prisma/enums';
 import { AppError } from '@/utils/AppError';
 
@@ -124,5 +125,26 @@ export class TasksController {
     const task = await assignTaskService.execute({ taskId, userId });
 
     return response.json(task);
+  }
+
+  async getHistory(request: Request, response: Response) {
+    const getTaskHistoryParamsSchema = z.object({
+      id: z.string().uuid('Invalid task ID'),
+    });
+
+    const { id: taskId } = getTaskHistoryParamsSchema.parse(request.params);
+
+    if (!request.user) {
+      throw new AppError('Unauthorized', 401);
+    }
+
+    const getTaskHistoryService = new GetTaskHistoryService();
+    const history = await getTaskHistoryService.execute({
+      taskId,
+      userId: request.user.id,
+      userRole: request.user.role,
+    });
+
+    return response.json(history);
   }
 }
