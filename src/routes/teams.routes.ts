@@ -1,25 +1,30 @@
 import { Router } from 'express';
-import { TasksController } from '../controllers/TasksController';
+import { TeamsController } from '../controllers/TeamsController';
 import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 import { verifyUserRole } from '../middlewares/verifyUserRole';
 
-const tasksRoutes = Router();
-const tasksController = new TasksController();
+const teamsRoutes = Router();
+const teamsController = new TeamsController();
 
-tasksRoutes.use(ensureAuthenticated);
+teamsRoutes.use(ensureAuthenticated);
 
-tasksRoutes.get('/', tasksController.list);
+teamsRoutes.get('/', teamsController.list);
+teamsRoutes.get('/:id', teamsController.show);
+teamsRoutes.get('/:id/members', teamsController.listMembers);
 
-tasksRoutes.get('/:id/history', tasksController.getHistory);
+teamsRoutes.post('/', verifyUserRole('ADMIN'), teamsController.create);
+teamsRoutes.put('/:id', verifyUserRole('ADMIN'), teamsController.update);
+teamsRoutes.delete('/:id', verifyUserRole('ADMIN'), teamsController.delete);
 
-tasksRoutes.post('/', verifyUserRole('ADMIN'), tasksController.create);
-tasksRoutes.delete('/:id', verifyUserRole('ADMIN'), tasksController.delete);
-
-tasksRoutes.put('/:id', tasksController.update);
-tasksRoutes.patch(
-  '/:id/assign',
+teamsRoutes.post(
+  '/:id/members',
   verifyUserRole('ADMIN'),
-  tasksController.assign
+  teamsController.addMember
+);
+teamsRoutes.delete(
+  '/:id/members/:userId',
+  verifyUserRole('ADMIN'),
+  teamsController.removeMember
 );
 
-export { tasksRoutes };
+export { teamsRoutes };

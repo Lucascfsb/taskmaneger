@@ -10,6 +10,8 @@ tasksRoutes.use(ensureAuthenticated);
 
 tasksRoutes.get('/', tasksController.list);
 
+tasksRoutes.get('/:id/history', tasksController.getHistory);
+
 tasksRoutes.post('/', verifyUserRole('ADMIN'), tasksController.create);
 tasksRoutes.delete('/:id', verifyUserRole('ADMIN'), tasksController.delete);
 
