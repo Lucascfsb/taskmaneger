@@ -1,13 +1,14 @@
 {
   "name": "task-management-api",
   "version": "1.0.0",
+  "type": "module",
   "description": "API REST para gerenciamento de tarefas e equipes com níveis de acesso.",
   "main": "index.js",
   "scripts": {
     "dev": "tsx --watch --env-file .env src/server.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build": "tsup src/server.ts --out-dir build --clean",
+    "build": "tsup src/server.ts --out-dir build --format esm --clean",
     "start": "node build/server.js",
     "postinstall": "prisma generate"
   },
