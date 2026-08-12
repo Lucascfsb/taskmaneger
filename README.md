@@ -29,7 +29,12 @@ Antes de iniciar, certifique-se de ter instalado em sua máquina:
    npm install
    ```
 
-3. **Configurar as Variáveis de Ambiente:**
+3. **Subir o Banco de Dados com Docker:**
+  ```bash
+  docker compose up -d
+  ```
+
+4. **Configurar as Variáveis de Ambiente:**
    Crie um arquivo `.env` na raiz do projeto:
    ```env
    PORT=3000
@@ -37,12 +42,12 @@ Antes de iniciar, certifique-se de ter instalado em sua máquina:
    JWT_SECRET="sua_chave_secreta_jwt_bem_segura"
    ```
 
-4. **Executar as Migrações do Banco (Prisma):**
+5. **Executar as Migrações do Banco (Prisma):**
    ```bash
    npx prisma migrate dev --name init
    ```
 
-5. **Iniciar a aplicação em modo de desenvolvimento:**
+6. **Iniciar a aplicação em modo de desenvolvimento:**
    ```bash
    npm run dev
    ```
@@ -96,7 +101,7 @@ A autenticação é realizada via **JWT**. Para acessar rotas protegidas, inclua
 
 | Método | Endpoint | Requer Auth | Permissão | Descrição |
 | --- | --- | --- | --- | --- |
-| `GET` | `/teams` | Sim | Qualquer | Lista todos os times |
+| `GET` | `/teams` | Sim | `ADMIN` | Lista todos os times |
 | `POST` | `/teams` | Sim | `ADMIN` | Cria um novo time |
 | `GET` | `/teams/:id` | Sim | Qualquer | Exibe detalhes de um time específico |
 | `PUT` | `/teams/:id` | Sim | `ADMIN` | Atualiza informações de um time |
