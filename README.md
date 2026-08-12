@@ -30,9 +30,9 @@ Antes de iniciar, certifique-se de ter instalado em sua máquina:
    ```
 
 3. **Subir o Banco de Dados com Docker:**
-  ```bash
-  docker compose up -d
-  ```
+   ```bash
+   docker compose up -d
+   ```
 
 4. **Configurar as Variáveis de Ambiente:**
    Crie um arquivo `.env` na raiz do projeto:
